@@ -19,18 +19,43 @@ use PHPMailer\PHPMailer\Exception;
 
 require '../assets/PHPMailer/src/Exception.php';
 require '../assets/PHPMailer/src/PHPMailer.php';
-require '../assets/PHPMailer/src/SMTP.php';
+require '../assets/PHPMailer/src/SMTP.php'; 
 
 require_once("rest.inc.php");
 
 ini_set('memory_limit', '1024M');
-class API extends REST
-{
-    const DB_SERVER = "localhost";
-    const DB_USER = "root";
-    const DB_PASSWORD = "";
-    const DBsitsdb = "sits_db";
 
+function loadEnv($path)
+{
+    if (!file_exists($path)) return;
+
+    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+    foreach ($lines as $line) {
+        $line = trim($line);
+
+        if ($line === '' || strpos($line, '#') === 0) {
+            continue;
+        }
+
+        list($key, $value) = explode('=', $line, 2);
+
+        $key = trim($key);
+        $value = trim($value);
+
+        // remove quotes
+        $value = trim($value, "\"'");
+
+        putenv("$key=$value");
+        $_ENV[$key] = $value;
+    }
+}
+
+// Load .env file
+loadEnv(__DIR__ . '/.env');
+
+class API extends REST
+{ 
     private $sitsdb;
 
     public function __construct()
@@ -43,8 +68,22 @@ class API extends REST
 	*/
     private function dbConnect()
     {
-        $this->sitsdb = new mysqli(self::DB_SERVER, self::DB_USER, self::DB_PASSWORD, self::DBsitsdb);
+        $this->sitsdb = new mysqli(
+            getenv('DB_SERVER'),
+            getenv('DB_USER'),
+            getenv('DB_PASSWORD'),
+            getenv('DB_NAME')
+        );
+
+        if ($this->sitsdb->connect_error) {
+            die("Database Connection Failed: " . $this->sitsdb->connect_error);
+        }
+
+        // MAILER SETUP
         $this->mailer = new PHPMailer(true);
+
+        $this->mailer->Username = getenv('MAIL_USERNAME');
+        $this->mailer->Password = getenv('MAIL_PASSWORD');
     }
 
     public function processApi()
