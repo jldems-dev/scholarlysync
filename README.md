@@ -1,1 +1,2 @@
 # scholarlysync
+ Scholarship management system
