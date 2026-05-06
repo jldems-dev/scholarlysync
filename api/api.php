@@ -2623,8 +2623,8 @@ class API extends REST
             $this->mailer->isSMTP();
             $this->mailer->Host       = 'smtp.gmail.com';
             $this->mailer->SMTPAuth   = true;
-            $this->mailer->Username   = 'scholarlysync320@gmail.com';
-            $this->mailer->Password   = 'fkrs hfcu hjbn gdga';
+            $this->mailer->Username   = getenv('MAIL_USERNAME');
+            $this->mailer->Password   = getenv('MAIL_PASSWORD');
             $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $this->mailer->Port       = 587;
 

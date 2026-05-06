@@ -1,7 +1,7 @@
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark" ng-controller="ngcontroller">
     <div class="container-fluid header-text" style="width: 18%;">
         <div class="d-flex align-items-center justify-content-start ml-0">
-            <img src="src/assets/images/LogoCSAV.png" alt="" class="sms_icon me-2" width="35px">
+            <img src="src/assets/images/favicon.png" alt="" class="sms_icon me-2" width="35px">
             <div class="d-flex flex-column " >
                 <h5 class="mb-0 text-white sms-h5">SCHOLARLYSYNC</h5>
                 <small class="sub text-white sms-small text-nowrap">School Based Web
